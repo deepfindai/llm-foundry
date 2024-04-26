@@ -931,3 +931,18 @@ def shareGPT_format_preprocessor(inp: Dict) -> ChatFormattedDict:
     except Exception as e:
         raise UnableToProcessPromptResponseError(inp) from e
     return {'messages': messages}
+
+
+def deepfind_alpaca_preprocessing_function(inp: Dict) -> PromptResponseDict:
+    """Format the text string."""
+    PROMPT_FORMAT = "Di seguito trovi un'istruzione che descrive un task. Scrivi una risposta che completa la richiesta in modo appropriato.\n\n### Istruzione:\n{instruction}\n\n### Risposta:\n"
+    try:
+        if inp['input'] != '':
+            instruction = inp['instruction'] + '\n' + inp['input']
+        else:
+            instruction = inp['instruction']
+        prompt = PROMPT_FORMAT.format(instruction=instruction)
+        response = inp['output']
+    except Exception as e:
+        raise UnableToProcessPromptResponseError(inp) from e
+    return {'prompt': prompt, 'response': response}
